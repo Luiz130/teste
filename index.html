@@ -1,18 +1,51 @@
 <!DOCTYPE html>
-<html lang="pt-br">
-
+<html lang="pt-BR">
 <head>
-    <title>Layote CSS com gids</title>
-    <meta charset="UFT-8">
-    <link href="estilo.css" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <title>Login com Google - Firebase</title>
 </head>
-
 <body>
-    <div class="grade">
-        <header>Materia da escola</header>
-        <div>Web</div>
-        <div>Banco de dados</div>
-        <div>Projeto final</div>
-        
+  <h2>Login com Google (Firebase)</h2>
+  <button id="loginBtn">Entrar com Google</button>
+
+  <div id="perfil" style="display: none; margin-top: 20px;">
+    <p><strong>Nome:</strong> <span id="nome"></span></p>
+    <p><strong>Email:</strong> <span id="email"></span></p>
+    <img id="foto" src="" alt="Foto do usuário" width="120" />
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+    import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyATG5P2NvdecjCPO7gzFNGs6l7plDrxY04",
+      authDomain: "sdel-16c6a.firebaseapp.com",
+      projectId: "sdel-16c6a",
+      storageBucket: "sdel-16c6a.firebasestorage.app",
+      messagingSenderId: "676676370586",
+      appId: "1:676676370586:web:444947d3dda78a80d9df23",
+      measurementId: "G-FZWQ9FYZG5"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
+
+    document.getElementById("loginBtn").addEventListener("click", () => {
+      signInWithPopup(auth, provider)
+        .then((result) => {
+          const user = result.user;
+          document.getElementById("nome").innerText = user.displayName;
+          document.getElementById("email").innerText = user.email;
+          document.getElementById("foto").src = user.photoURL;
+          document.getElementById("perfil").style.display = "block";
+        })
+        .catch((error) => {
+          alert("Erro no login: " + error.message);
+          console.error(error);
+        });
+    });
+  </script>
 </body>
 </html>
